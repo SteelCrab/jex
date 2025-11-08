@@ -5,7 +5,6 @@ use crate::lexer::TokenType;
 mod tests{
     use super::*;
 
-
     #[test]
     fn test_class_main(){
         let source_1="public class Main { }";
@@ -19,6 +18,7 @@ mod tests{
         assert_eq!(tokens[4].token_type, TokenType::RightBrace);
     }
 
+    #[test]
     fn test_intger(){
         let source_1="int a = 10;";
         let mut lexer = Lexer::new(source_1);
