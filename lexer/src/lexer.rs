@@ -16,3 +16,8 @@ pub enum TokenType{
     Eof,
 
 }
+// Token
+pub struct Token{
+    pub token_type: TokenType,
+    pub line: usize,
+}
