@@ -7,7 +7,9 @@ pub enum TokenType{
     //Var
     Identifier(String),
     //Number
-    Number(i32),
+    NumberInt(i32),
+    //Operations
+    OperationAssign,
     // { }
     LeftBrace, RightBrace,
     // ( )
@@ -101,6 +103,10 @@ impl Lexer {
             ';' => {
                 self.next_char();
                 TokenType::Semicolon
+            } 
+            '=' => {
+                self.next_char();
+                TokenType::OperationAssign
             }
             //read num
             '0'..='9' => self.read_number(),
@@ -131,8 +137,8 @@ impl Lexer {
                 break;
             }
         }
-        let value = num_str.parse().unwrap_or(0);
-        TokenType::Number(value)
+        let number_i32:i32 = num_str.parse().unwrap_or(0);
+        TokenType::NumberInt(number_i32)
 
     }
     
