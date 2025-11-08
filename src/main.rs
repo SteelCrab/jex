@@ -1,5 +1,3 @@
 use lexer;
 
-fn main(){
-    
-}
+fn main() {}
