@@ -1,0 +1,11 @@
+[package]
+name = "jex"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+lexer = {path = "lexer"}
+
+[workspace]
+members = [".", "lexer"]
+resolver = "2"
