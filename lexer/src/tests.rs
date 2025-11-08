@@ -18,4 +18,16 @@ mod tests{
         assert_eq!(tokens[3].token_type, TokenType::LeftBrace);
         assert_eq!(tokens[4].token_type, TokenType::RightBrace);
     }
+
+    fn test_intger(){
+        let source_1="int a = 10;";
+        let mut lexer = Lexer::new(source_1);
+        let tokens = lexer.tokenize();
+
+        assert_eq!(tokens[0].token_type, TokenType::Int);
+        assert_eq!(tokens[1].token_type, TokenType::Identifier("a".to_owned()));
+        assert_eq!(tokens[2].token_type, TokenType::OperationAssign);
+        assert_eq!(tokens[3].token_type, TokenType::NumberInt(10));
+        assert_eq!(tokens[4].token_type, TokenType::Semicolon);
+    }
 }
