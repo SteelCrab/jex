@@ -1,4 +1,3 @@
-pub mod lexer;
-
+mod lexer;
 mod tests;
 
