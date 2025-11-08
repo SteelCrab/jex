@@ -1,9 +1,12 @@
-#[derive(Debug,Clone,PartialEq)]
-pub enum TokenType{
+#[derive(Debug, Clone, PartialEq)]
+pub enum TokenType {
     //Class & Access Modifiers && member
-    Public, Class, Static,
+    Public,
+    Class,
+    Static,
     //Primitive Types
-    Void, Int,
+    Void,
+    Int,
     //Var
     Identifier(String),
     //Number
@@ -11,18 +14,19 @@ pub enum TokenType{
     //Operations
     OperationAssign,
     // { }
-    LeftBrace, RightBrace,
+    LeftBrace,
+    RightBrace,
     // ( )
-    LeftParen, RightParen,
+    LeftParen,
+    RightParen,
     // ;
-    Semicolon,                       
+    Semicolon,
     // Done
     Eof,
-
 }
 // Token
-#[derive(Debug,Clone)]
-pub struct Token{
+#[derive(Debug, Clone)]
+pub struct Token {
     pub token_type: TokenType,
     pub line: usize,
 }
@@ -34,50 +38,52 @@ pub struct Lexer {
 }
 
 impl Lexer {
-    pub fn new(source: &str) -> Self{
-        Self{
+    pub fn new(source: &str) -> Self {
+        Self {
             input: source.chars().collect(),
             position: 0,
             line: 1,
         }
     }
-    
+
     pub fn tokenize(&mut self) -> Vec<Token> {
         let mut tokens = Vec::new();
-    
+
         while !self.is_at_end() {
             self.skip_whitespace();
-            
-            if self.is_at_end(){
+
+            if self.is_at_end() {
                 break;
             }
 
-           if let Some(token) = self.next_token() {
+            if let Some(token) = self.next_token() {
                 tokens.push(token);
-           }
-            
+            }
         }
-        tokens.push(Token { token_type:TokenType::Eof, line: self.line });
-       
+        tokens.push(Token {
+            token_type: TokenType::Eof,
+            line: self.line,
+        });
+
         tokens
     }
-    fn is_at_end(&mut self) -> bool{
-         self.position >= self.input.len()
+    fn is_at_end(&mut self) -> bool {
+        self.position >= self.input.len()
     }
     fn skip_whitespace(&mut self) {
-        while let Some(ch) =  self.current_char() {
-                if ch.is_whitespace() {
-                    if ch =='\n'{
-                        self.line += 1;
-                    }
-                    self.next_char();
-                } else {
-                    break;
+        while let Some(ch) = self.current_char() {
+            if ch.is_whitespace() {
+                if ch == '\n' {
+                    self.line += 1;
                 }
+                self.next_char();
+            } else {
+                break;
             }
+        }
     }
 
-    fn current_char(&self) -> Option<char>{
+    fn current_char(&self) -> Option<char> {
         self.input.get(self.position).copied()
     }
     fn next_token(&mut self) -> Option<Token> {
@@ -103,7 +109,7 @@ impl Lexer {
             ';' => {
                 self.next_char();
                 TokenType::Semicolon
-            } 
+            }
             '=' => {
                 self.next_char();
                 TokenType::OperationAssign
@@ -111,48 +117,45 @@ impl Lexer {
             //read num
             '0'..='9' => self.read_number(),
             //read identifier
-            ('a'..='z') | ('A'..= 'Z') => self.read_identifier(),
+            ('a'..='z') | ('A'..='Z') => self.read_identifier(),
 
             _ => {
                 self.next_char();
                 return self.next_token();
             }
         };
-        
-        Some(Token { token_type, line })
 
+        Some(Token { token_type, line })
     }
-    fn next_char(&mut self){
+    fn next_char(&mut self) {
         self.position += 1;
     }
-    
+
     fn read_number(&mut self) -> TokenType {
         let mut num_str = String::new();
 
         while let Some(ch) = self.current_char() {
-            if ch.is_numeric(){
+            if ch.is_numeric() {
                 num_str.push(ch);
                 self.next_char();
             } else {
                 break;
             }
         }
-        let number_i32:i32 = num_str.parse().unwrap_or(0);
+        let number_i32: i32 = num_str.parse().unwrap_or(0);
         TokenType::NumberInt(number_i32)
-
     }
-    
+
     fn read_identifier(&mut self) -> TokenType {
-        let mut word:String = String::new();
-        
-        while let Some(ch) = self.current_char(){
+        let mut word: String = String::new();
+
+        while let Some(ch) = self.current_char() {
             if ch.is_alphanumeric() {
                 word.push(ch);
                 self.next_char();
-            }else{
+            } else {
                 break;
             }
-        
         }
         match word.as_str() {
             "class" => TokenType::Class,
@@ -162,9 +165,5 @@ impl Lexer {
             "int" => TokenType::Int,
             _ => TokenType::Identifier(word),
         }
-       
     }
-
-
 }
-  
