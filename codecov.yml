@@ -17,6 +17,8 @@ coverage:
 
 ignore:
   - "lexer/src/tests.rs"
+  - "ast/src/tests.rs"
+  - "lexer/src/tests.rs"
 
 comment:
   layout: "reach,diff,flags,tree"
